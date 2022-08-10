@@ -2,16 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
+use Closure;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use App\Models\Post;
 use Filament\Tables;
+use Illuminate\Support\Str;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\BooleanColumn;
+use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PostResource\RelationManagers;
 
 class PostResource extends Resource
 {
@@ -23,7 +30,14 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Select::make('categoria_id')->relationship('categoria', 'name'),
+                TextInput::make('name')->reactive()
+                ->afterStateUpdated(function (Closure $set, $state) {
+                    $set('slug', Str::slug($state));
+                })->required(),
+                TextInput::make('body')->required(),
+                TextInput::make('slug')->required(),
+                Toggle::make('publicado')
             ]);
     }
 
@@ -31,7 +45,13 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('name')->limit(50)->sortable(),
+                TextColumn::make('body'),
+                TextColumn::make('slug')->limit(50),
+                TextColumn::make('created_at')->since()->sortable(),
+                TextColumn::make('updated_at')->since()->sortable(),
+                BooleanColumn::make('publicado')
             ])
             ->filters([
                 //

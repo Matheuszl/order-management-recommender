@@ -12,6 +12,10 @@ class Post extends Model
 
     protected $fillable = ['categoria_id','name', 'body', 'slug', 'publicado'];
 
+    protected $casts = [
+        'publicado' => 'boolean',
+    ];
+
     /**
      * Um post pode ter apenas uma categoria
      */
