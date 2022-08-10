@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\CategoriaResource\Pages;
 
-use App\Filament\Resources\CategoriaResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\CreateAction;
+use App\Filament\Resources\CategoriaResource;
 
 class ListCategorias extends ListRecords
 {

@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoriaResource\Pages;
-use App\Filament\Resources\CategoriaResource\RelationManagers;
-use App\Models\Categoria;
+use Closure;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Categoria;
+use Illuminate\Support\Str;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\CategoriaResource\Pages;
+
+ 
+
 
 class CategoriaResource extends Resource
 {
@@ -21,9 +25,16 @@ class CategoriaResource extends Resource
 
     public static function form(Form $form): Form
     {
+        /**
+         * Formulario para criar uma nova categoria
+         */
         return $form
             ->schema([
-                //
+                TextInput::make('name')->reactive()
+                ->afterStateUpdated(function (Closure $set, $state) {
+                    $set('slug', Str::slug($state));
+                })->required(),
+                TextInput::make('slug')->required()
             ]);
     }
 
@@ -31,7 +42,9 @@ class CategoriaResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('name')->limit(50)->sortable(),
+                TextColumn::make('slug')->limit(50)
             ])
             ->filters([
                 //
