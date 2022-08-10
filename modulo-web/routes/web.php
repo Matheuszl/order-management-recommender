@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |  
 | http://127.0.0.1:8000/admin/login
+|
+| 42:36
 */
 
 Route::get('/', function () {
