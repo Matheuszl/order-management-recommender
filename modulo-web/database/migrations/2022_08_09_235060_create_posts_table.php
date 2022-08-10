@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('categoria_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('body');
+            $table->string('slug')->unique();
+            $table->boolean('publicado')->default(false);
             $table->timestamps();
         });
     }
