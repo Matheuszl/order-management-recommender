@@ -13,6 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\CategoriaResource\Pages;
+use App\Filament\Resources\CategoriaResource\Widgets\StatsOverview;
+use App\Filament\Resources\CategoriaResource\RelationManagers\PostsRelationManager;
 
  
 
@@ -20,6 +22,7 @@ use App\Filament\Resources\CategoriaResource\Pages;
 class CategoriaResource extends Resource
 {
     protected static ?string $model = Categoria::class;
+    protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -43,7 +46,7 @@ class CategoriaResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('name')->limit(50)->sortable(),
+                TextColumn::make('name')->limit(50)->sortable()->searchable(),
                 TextColumn::make('slug')->limit(50)
             ])
             ->filters([
@@ -60,9 +63,17 @@ class CategoriaResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PostsRelationManager::class
         ];
     }
+
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverview::class,
+        ];
+    }
+    
     
     public static function getPages(): array
     {
