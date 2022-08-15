@@ -14,7 +14,7 @@ class CreateCategoria extends CreateRecord
      * Esta funcao redireciona para a lista de categorias após criar uma nova
      */
     protected function getRedirectUrl(): string
-{
-    return $this->getResource()::getUrl('index');
-}
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
