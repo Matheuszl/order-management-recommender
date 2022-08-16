@@ -8,6 +8,7 @@ use App\Models\PedidoProdutoLista;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Pedido extends Model
 {
@@ -34,13 +35,18 @@ class Pedido extends Model
      * Um Pedido pode conter varios Produtos
      * N*N
      */
-    // public function produtos()
+    // public function produtos(): BelongsToMany
     // {
-    //     return $this->belongsToMany(Produto::class);
+    //     return $this->belongsToMany(PedidoProdutoLista::class, 'pedido_id');
     // }
 
     public function produtos(): HasMany
     {
         return $this->hasMany(PedidoProdutoLista::class, 'pedido_id');
     }
+
+    // public function items(): HasMany
+    // {
+    //     return $this->hasMany(OrderItem::class, 'shop_order_id');
+    // }
 }

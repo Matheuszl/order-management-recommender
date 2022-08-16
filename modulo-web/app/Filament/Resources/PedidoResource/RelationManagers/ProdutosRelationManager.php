@@ -48,8 +48,7 @@ class ProdutosRelationManager extends RelationManager
                 ->defaultItems(1)
                 ->disableLabel(),
             ])
-        ])
-            ->columns(1);
+        ])->columns(1);
     }
 
     public static function table(Table $table): Table

@@ -64,7 +64,8 @@ class PedidoResource extends Resource
                     Select::make('produto_id')
                     ->label('Produto')
                     ->options(Produto::query()->pluck('nome', 'id'))
-                    ->required(),
+                    ->required()
+                    ->reactive(),
                     TextInput::make('quantidade')
                     ->numeric()
                     ->required(),
@@ -72,7 +73,7 @@ class PedidoResource extends Resource
                 ->defaultItems(1)
                 ->disableLabel(),
             ])
-        ]); //FIM DO SCHEMA INICIAL
+        ])->columns(1); //FIM DO SCHEMA INICIAL
     }
 
     public static function table(Table $table): Table
