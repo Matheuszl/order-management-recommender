@@ -12,6 +12,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PedidoResource;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Filters\MultiSelectFilter;
 use App\Filament\Resources\PedidoResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PedidoResource\Pages\EditPedido;
@@ -30,10 +32,14 @@ use App\Filament\Resources\PedidoResource\RelationManagers;
 use App\Filament\Resources\PedidoResource\Pages\ListPedidos;
 use App\Filament\Resources\PedidoResource\Pages\CreatePedido;
 use App\Filament\Resources\PedidoResource\RelationManagers\ProdutosRelationManager;
+use App\Filament\Resources\PedidoResource\Widgets\BlogPostsChart;
+use App\Filament\Resources\PedidoResource\Widgets\PedidoChart;
+use App\Filament\Resources\PedidoResource\Widgets\StatsOverview;
 
 class PedidoResource extends Resource
 {
     protected static ?string $model = Pedido::class;
+    protected static ?string $recordTitleAttribute = 'descricao';
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -65,8 +71,14 @@ class PedidoResource extends Resource
                     ->label('Produto')
                     ->options(Produto::query()->pluck('nome', 'id'))
                     ->required()
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('preco', Produto::find($state)?->price ?? 0))
                     ->reactive(),
                     TextInput::make('quantidade')
+                    ->numeric()
+                    ->required(),
+                    TextInput::make('preco')
+                    ->label('Valor Por Unidade')
+                    ->disabled()
                     ->numeric()
                     ->required(),
                 ])->orderable()
@@ -81,13 +93,19 @@ class PedidoResource extends Resource
         return $table
             ->columns([
             TextColumn::make('id')->sortable(),
-            TextColumn::make('descricao'),
+            TextColumn::make('mercado.nome'),
+            TextColumn::make('descricao')->sortable()->searchable(),
             TextColumn::make('created_at')->since()->sortable(),
             TextColumn::make('updated_at')->since()->sortable(),
-            BooleanColumn::make('realizado')
+            BooleanColumn::make('realizado')->sortable(),
         ])
             ->filters([
-            //
+
+                 
+                Filter::make('realizado')
+                    ->query(fn (Builder $query): Builder => $query->where('realizado', true)),
+
+                    MultiSelectFilter::make('mercado')->relationship('mercado', 'nome')
         ])
             ->actions([
             Tables\Actions\EditAction::make(),
@@ -112,5 +130,16 @@ class PedidoResource extends Resource
             'edit' => Pages\EditPedido::route('/{record}/edit'),
         ];
     }
+
+
+    public static function getWidgets(): array
+    {
+        return [
+            PedidoChart::class,
+            // StatsOverview::class
+        ];
+    }
+
+    
 
 }

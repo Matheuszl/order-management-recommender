@@ -24,10 +24,13 @@ use App\Filament\Resources\ProdutoResource\RelationManagers;
 use App\Filament\Resources\ProdutoResource\Pages\EditProduto;
 use App\Filament\Resources\ProdutoResource\Pages\ListProdutos;
 use App\Filament\Resources\ProdutoResource\Pages\CreateProduto;
+use Filament\Tables\Filters\Filter;
+use App\Filament\Resources\ProdutoResource\Widgets\StatsOverview;
 
 class ProdutoResource extends Resource
 {
     protected static ?string $model = Produto::class;
+    protected static ?string $recordTitleAttribute = 'nome';
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -53,15 +56,16 @@ class ProdutoResource extends Resource
         return $table
             ->columns([
             TextColumn::make('id')->sortable(),
-            TextColumn::make('nome')->limit(50)->sortable(),
+            TextColumn::make('nome')->limit(50)->sortable()->searchable(),
             TextColumn::make('slug')->limit(50),
             TextColumn::make('preco'),
             TextColumn::make('created_at')->since()->sortable(),
             TextColumn::make('updated_at')->since()->sortable(),
-            BooleanColumn::make('ativo')
+            BooleanColumn::make('ativo')->sortable(),
         ])
             ->filters([
-            //
+                Filter::make('realizado')
+                ->query(fn (Builder $query): Builder => $query->where('realizado', true))
         ])
             ->actions([
             Tables\Actions\EditAction::make(),
@@ -84,6 +88,13 @@ class ProdutoResource extends Resource
             'index' => Pages\ListProdutos::route('/'),
             'create' => Pages\CreateProduto::route('/create'),
             'edit' => Pages\EditProduto::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverview::class,
         ];
     }
 

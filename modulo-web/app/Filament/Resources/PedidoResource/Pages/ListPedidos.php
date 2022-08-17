@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\PedidoResource\Pages;
 
-use App\Filament\Resources\PedidoResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\PedidoResource;
+use App\Filament\Resources\PedidoResource\Widgets\PedidoChart;
+use App\Filament\Resources\PedidoResource\Widgets\StatsOverview;
 
 class ListPedidos extends ListRecords
 {
@@ -14,6 +16,15 @@ class ListPedidos extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            PedidoChart::class,
+            // StatsOverview::class
         ];
     }
 }

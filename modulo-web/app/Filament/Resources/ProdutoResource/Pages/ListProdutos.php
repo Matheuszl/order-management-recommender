@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ProdutoResource\Pages;
 use App\Filament\Resources\ProdutoResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ProdutoResource\Widgets\StatsOverview;
 
 class ListProdutos extends ListRecords
 {
@@ -14,6 +15,14 @@ class ListProdutos extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatsOverview::class
         ];
     }
 }

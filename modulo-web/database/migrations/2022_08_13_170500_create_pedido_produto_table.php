@@ -15,6 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pedido_produto', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('pedido_id')->nullable()->constrained()->cascadeOnDelete();            
             $table->foreignId('produto_id')->nullable()->constrained()->cascadeOnDelete();
             $table->unsignedInteger('sort')->default(0);

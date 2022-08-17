@@ -18,6 +18,10 @@ return [
             'label' => 'Logout',
         ],
 
+        'teste' => [
+            'label' => 'Teste',
+        ],
+
     ],
 
 ];

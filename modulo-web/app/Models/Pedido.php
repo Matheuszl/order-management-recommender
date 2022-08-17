@@ -44,9 +44,4 @@ class Pedido extends Model
     {
         return $this->hasMany(PedidoProdutoLista::class, 'pedido_id');
     }
-
-    // public function items(): HasMany
-    // {
-    //     return $this->hasMany(OrderItem::class, 'shop_order_id');
-    // }
 }

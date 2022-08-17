@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\MercadoResource\Pages;
 
-use App\Filament\Resources\MercadoResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\MercadoResource;
+use App\Filament\Resources\MercadoResource\Widgets\StatsOverview;
 
 class ListMercados extends ListRecords
 {
@@ -14,6 +15,13 @@ class ListMercados extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatsOverview::class
         ];
     }
 }
