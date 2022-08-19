@@ -23,6 +23,8 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Filters\MultiSelectFilter;
 use App\Filament\Resources\MercadoResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use App\Filament\Resources\MercadoResource\RelationManagers;
 use App\Filament\Resources\MercadoResource\Pages\EditMercado;
 use App\Filament\Resources\MercadoResource\Pages\ListMercados;
@@ -40,6 +42,7 @@ class MercadoResource extends Resource
     {
         return $form
             ->schema([
+            SpatieMediaLibraryFileUpload::make('imagem')->collection('mercados'),
             TextInput::make('nome')->reactive()
             ->afterStateUpdated(function (Closure $set, $state) {
             $set('slug', Str::slug($state));
@@ -63,12 +66,14 @@ class MercadoResource extends Resource
         return $table
             ->columns([
             TextColumn::make('id')->sortable(),
+            SpatieMediaLibraryImageColumn::make('imagem')->collection('mercados'),
             TextColumn::make('nome')->sortable()->searchable(),
             TextColumn::make('endereco'),
             TextColumn::make('contato'),
             TextColumn::make('endereco'),
             TextColumn::make('porte'),
-            BooleanColumn::make('ativo')->sortable()
+            BooleanColumn::make('ativo')->sortable(),
+            
         ])
             ->filters([
             Filter::make('ativo')
